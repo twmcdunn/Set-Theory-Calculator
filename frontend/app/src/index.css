@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  margin: 0 auto;
+  overflow-x: hidden;
+  padding: 0px;
+  max-width: 900px;
+  border-radius: 24px;
+}
+
+/*background*/
+:root {
+  --bg-dark-1: #0b0b0b;
+  --bg-dark-2: #111214;
+  --accent-dark: #1b1d20;
+  --token-color: rgba(220, 220, 230, 0.9);
+  --noise-opacity: 0.06;
+  --gradient-speed: 18s;
+  --tokens-count: 18;
+}
+
+/* container */
+.set-bg {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255, 255, 255, 0.02), transparent 10%),
+    radial-gradient(900px 400px at 90% 80%, rgba(255, 255, 255, 0.01), transparent 10%),
+    linear-gradient(180deg, var(--bg-dark-1) 0%, var(--bg-dark-2) 60%, #0f1112 100%);
+  isolation: isolate;
+  /* ensure pseudo elements blend properly */
+  perspective: 900px;
+  color: #e6e8ea;
+  --glow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* animated shifting gradient layer */
+.set-bg::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from 220deg at 50% 50%,
+      rgba(255, 255, 255, 0.01),
+      rgba(255, 255, 255, 0.005),
+      rgba(255, 255, 255, 0.01));
+  opacity: 0.6;
+  mix-blend-mode: overlay;
+  filter: blur(60px) saturate(80%);
+  animation: rotateConic var(--gradient-speed) linear infinite;
+  pointer-events: none;
+}
+
+/* subtle film-grain / noise overlay */
+.set-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.12' /></svg>");
+  opacity: var(--noise-opacity);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* floating set tokens wrapper */
+.floating-sets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+/* each floating token */
+.floating-set {
+  position: absolute;
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  translate: -50% -50%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-size: clamp(0.7rem, 1.6vw, 1.05rem);
+  color: var(--token-color);
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(6px) saturate(140%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+
+  /* controls for per-token behavior */
+  --z: 60px;
+  /* visual depth */
+  --s: 1;
+  /* scale */
+  --t: 20s;
+  /* animation duration */
+
+  /* initial 3D position and size */
+  transform: translateZ(var(--z)) translateY(0) scale(var(--s)) rotateY(calc(var(--z) / 30deg));
+  opacity: calc(0.45 + (var(--z) / 240));
+  transition: transform 0.2s linear, opacity 0.2s linear;
+  will-change: transform, opacity;
+  animation: floatToken var(--t) linear infinite;
+}
+
+/* subtle rotation/vertical wobble + slow drift */
+@keyframes floatToken {
+  0% {
+    transform: translateZ(var(--z)) translateY(0) rotateY(0deg) rotateZ(-2deg);
+    opacity: calc(0.45 + (var(--z) / 240));
+  }
+
+  25% {
+    transform: translateZ(calc(var(--z) + 18px)) translateY(-6px) rotateY(12deg) rotateZ(2deg);
+  }
+
+  50% {
+    transform: translateZ(var(--z)) translateY(4px) rotateY(-8deg) rotateZ(-1deg);
+  }
+
+  75% {
+    transform: translateZ(calc(var(--z) - 14px)) translateY(-2px) rotateY(7deg) rotateZ(1deg);
+  }
+
+  100% {
+    transform: translateZ(var(--z)) translateY(0) rotateY(0deg) rotateZ(-2deg);
+  }
+}
+
+/* conic rotation for background shimmer */
+@keyframes rotateConic {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* tweak when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .set-bg::before,
+  .floating-set {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* example inner app styling to keep above background */
+.app-ui {
+  position: relative;
+  z-index: 2;
+  padding: 28px;
+  /* an elegant card look for the calculator */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  max-width: 960px;
+  margin: 48px auto;
+  backdrop-filter: blur(6px);
+}
+
+/* optional smaller token style for depth layering */
+.floating-set.small {
+  font-size: 0.9em;
+  padding: 5px 8px;
+  opacity: .65;
+}
+
+.floating-set.large {
+  font-size: 1.1em;
+  padding: 7px 12px;
+  opacity: .95;
+}
+
+/* floating set tokens wrapper */
+.floating-sets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* each floating token now travels in one direction */
+.floating-set {
+  position: absolute;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-size: clamp(0.7rem, 1.6vw, 1.05rem);
+  color: var(--token-color, rgba(220,220,230,0.9));
+  padding: 6px 10px;
+  border-radius: 8px;
+  backdrop-filter: blur(6px) saturate(140%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  transform-style: preserve-3d;
+
+  /* These custom properties control randomization */
+  --x-start: 0%;
+  --y-start: 0%;
+  --x-end: 120%;   /* move far across horizontally */
+  --y-end: -40%;   /* move vertically upward or downward */
+  --z-start: 0px;
+  --z-end: 300px;  /* fly toward or away from camera */
+  --scale: 1;
+  --duration: 20s;
+
+  animation: floatThroughSpace var(--duration) linear infinite;
+}
+
+/* The new animation — one directional drift with fade in/out */
+@keyframes floatThroughSpace {
+  0% {
+    opacity: 0;
+    transform:
+      translate3d(var(--x-start), var(--y-start), var(--z-start))
+      scale(var(--scale));
+  }
+  20% {
+    opacity: 1; /* fade in */
+  }
+  80% {
+    opacity: 1; /* stay visible most of the journey */
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translate3d(var(--x-end), var(--y-end), var(--z-end))
+      scale(var(--scale));
+  }
+}
