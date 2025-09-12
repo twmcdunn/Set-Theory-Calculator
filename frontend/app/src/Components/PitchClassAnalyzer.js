@@ -25,6 +25,7 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
     const blackKeys = [1, 3, 6, 8, 10];
     const synthRef = useRef(null);
     const muted = useRef(false);
+    const [loadingResults, setLoadingResults] = useState(false);
 
     // useEffect(
     //     () => {
@@ -74,6 +75,7 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
     };
 
     const analyze = () => {
+        setLoadingResults(true);
         let inputSet;
         if (inputMode === 'piano') {
             inputSet = Array.from(selectedNotes);
@@ -221,7 +223,16 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
         }
+        setLoadingResults(false);
     };
+
+    useEffect(() => {
+        if (!results) return;
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    }, [results])
 
     const normalizeSet = useCallback((set) => {
         var resultsNorm = []
@@ -447,9 +458,9 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                         <div className="grid md:grid-cols-2 gap-6">
 
                             {Object.entries(results).map(([key, value]) =>
-                            (<div 
-                            key={key}
-                            className="bg-yellow-600/10 border border-yellow-400/20 rounded-xl p-6">
+                            (<div
+                                key={key}
+                                className="bg-yellow-600/10 border border-yellow-400/20 rounded-xl p-6">
                                 <h4 className="text-lg font-semibold text-yellow-200 mb-3">{value.label}</h4>
                                 <p className="text-3xl font-mono text-yellow-100 text-center bg-black/20 py-3 rounded-lg">
                                     {value.value}
@@ -457,6 +468,10 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                             </div>)
                             )
                             }
+
+                            {loadingResults && (
+                                <LoadingSpinner />
+                            )}
 
                         </div>
                     </div>

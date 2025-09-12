@@ -1,10 +1,10 @@
 {
-    "files": {
-      "PrimeForm.py": "./PrimeForm.py",
-      "MoreStats.py": "./MoreStats.py",
-      "Combinations.py": "./Combinations.py",
-      "PrimeFormCalculator.py": "./PrimeFormCalculator.py",
-      "MoreStatsCalculator.py": "./MoreStatsCalculator.py",
-      "CombinationsCalculator.py": "./CombinationsCalculator.py"
-    }
+  "files": {
+    "PrimeForm.py": "./PrimeForm.py",
+    "MoreStats.py": "./MoreStats.py",
+    "Combinations.py": "./Combinations.py",
+    "PrimeFormCalculator.py": "./PrimeFormCalculator.py",
+    "MoreStatsCalculator.py": "./MoreStatsCalculator.py",
+    "CombinationsCalculator.py": "./CombinationsCalculator.py"
   }
+}
