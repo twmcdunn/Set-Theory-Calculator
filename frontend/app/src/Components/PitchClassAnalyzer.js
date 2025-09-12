@@ -218,7 +218,7 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 setResults((prev) => ({
                     ...prev, getForteNumber: {
                         label: 'Forte Number (Rahn-Solomon Flavor)',
-                        value: "ERROR: Backend logic for complements not implemented."
+                        value: "ERROR: Backend logic for Forte numbers not implemented."
                     }
                 }));
             }
