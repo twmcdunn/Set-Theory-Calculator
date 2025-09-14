@@ -29,13 +29,13 @@ def getIV(set):
     return msc.getIntervalVector(set)
 
 def getTS(set):
-    return msc.isTranspositionallySymmetrical(set)
+    return str(msc.isTranspositionallySymmetrical(set))
 
 def getI(set):
     return msc.getInversion(set)
 
 def getIS(set):
-    return msc.isInversionallySymmetrical(set)
+    return str(msc.isInversionallySymmetrical(set))
 
 def getC(set):
     return msc.getComplement(set)

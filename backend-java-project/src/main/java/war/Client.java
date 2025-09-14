@@ -81,11 +81,11 @@ public class Client {
     }
 
     @JSExport
-    public static boolean isTranspositionallySymmetrical(int[] set) {
+    public static String isTranspositionallySymmetrical(int[] set) {
         if (statsImpl == null)
-            return false;
+            return null;
         ArrayList<Integer> alSet = arrToAL(set);
-        return statsImpl.isTranspositionallySymmetrical(alSet);
+        return statsImpl.isTranspositionallySymmetrical(alSet) + "";
     }
 
     @JSExport
@@ -98,11 +98,11 @@ public class Client {
     }
 
     @JSExport
-    public static boolean isInversionallySymmetrical(int[] set) {
+    public static String isInversionallySymmetrical(int[] set) {
         if (statsImpl == null)
-            return false;
+            return null;
         ArrayList<Integer> alSet = arrToAL(set);
-        return statsImpl.isInversionallySymmetrical(alSet);
+        return statsImpl.isInversionallySymmetrical(alSet) + "";
     }
 
     @JSExport
