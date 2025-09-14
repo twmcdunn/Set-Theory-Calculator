@@ -16,7 +16,7 @@ except Exception:
 cc = None
 try:
     from CombinationsCalculator import CombinationsCalculator
-    cc = CombinationsCalculator(pfc)
+    cc = CombinationsCalculator(pfc, msc)
 except Exception:
     pass
 
@@ -43,33 +43,24 @@ def getC(set):
 def getFN(set):
     return cc.getForteNumber(set)
 
-getPrimeFormpy = None
+
 if 'PrimeFormCalculator' in locals():
     getPrimeFormpy = create_proxy(getPF)
+    js.globalThis.getPrimeForm = getPrimeFormpy
 
-getIntervalVectorpy = None
-isTranspositionallySymmetricalpy = None
-getInversionpy = None
-isInversionallySymmetricalpy = None
-getComplementpy = None
 if 'MoreStatsCalculator' in locals():
     getIntervalVectorpy = create_proxy(getIV)
     isTranspositionallySymmetricalpy = create_proxy(getTS)
     getInversionpy = create_proxy(getI)
     isInversionallySymmetricalpy = create_proxy(getIS)
     getComplementpy = create_proxy(getC)
+    js.globalThis.getIntervalVector = getIntervalVectorpy
+    js.globalThis.isTranspositionallySymmetrical = isTranspositionallySymmetricalpy
+    js.globalThis.getInversion = getInversionpy
+    js.globalThis.isInversionallySymmetrical = isInversionallySymmetricalpy
+    js.globalThis.getComplement = getComplementpy
 
-getForteNumberpy = None
 if 'CombinationsCalculator' in locals():
     getForteNumberpy = create_proxy(getFN)
-
-js.globalThis.getPrimeForm = getPrimeFormpy
-
-js.globalThis.getIntervalVector = getIntervalVectorpy
-js.globalThis.isTranspositionallySymmetrical = isTranspositionallySymmetricalpy
-js.globalThis.getInversion = getInversionpy
-js.globalThis.isInversionallySymmetrical = isInversionallySymmetricalpy
-js.globalThis.getComplement = getComplementpy
-
-js.globalThis.getForteNumber = getForteNumberpy
+    js.globalThis.getForteNumber = getForteNumberpy
 

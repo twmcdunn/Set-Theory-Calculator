@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
 class Combinations(ABC):
-    def __init__(self, primeFormCaluclator):
+    def __init__(self, primeFormCaluclator, moreStatsCalculator):
         self.pfc = primeFormCaluclator
+        self.msc = moreStatsCalculator
 
     #Implement the standard recursive combination generation algorithm
     #Takes as input a partial combination of zero or more elements.
@@ -19,13 +20,8 @@ class Combinations(ABC):
     def getAllCombinations(self, partialComb, card):
         pass
 
-    # # Same logic as above, but only adding notes belonging to superSet,
-    # # rather than all notes of the chromatic scale
-    # @abstractmethod
-    # def getAllSubsets(self, partialSubset, card, superSet):
-    #     pass
-
-    # Takes a list of lists
+    # Takes a list of lists representing an arbitrary collection
+    # of pitch class sets.
     # Returns a list of only the transpositionally unique sets
     # found in the input (unique set classes).
     # You will need to convert sets to prime form.
@@ -34,21 +30,32 @@ class Combinations(ABC):
     def getUniqueSetClasses(self, sets):
         pass
 
-    #using the above helper methods, determine the unqiue combinations
-    #for the given cardinality and return them as a list of lists
+    #determines the unqiue combinations for the given cardinality
+    # and return them as a list of lists. Uses getAllCombinations
+    # to get all pitch class sets of a given cardinality and passes
+    # this output through getUniqueSetClasses to filter out only 
+    # unique set classes from this list
     @abstractmethod
     def getUniqueCombinations(self, card):
+        pass
+
+    # takes a set of numbers (list) and returns the numbers as
+    # a base ten number written backwards. E.g. [1,2,3,0,1,0]
+    # yields the number 10,321
+    @abstractmethod
+    def getBaseTen(self, digits):
         pass
 
     #using getUniqueCombinations put the combinations into a lexicographical
     #order. the order follows Forte's with a Rahn-Solomon flavor.
     #First sort by interval vector, treating the six digits of the iv
-    #as digits of a base-ten number written backward.
-    #where two sets have the same iv, they are 'zygotic' or 'z-related'
+    #as digits of a base-ten number written backward. Use getBaseTen for this.
+    #Where two sets have the same iv, they are 'zygotic' or 'z-related'
     #the set more densly packed to the left gets placed in its natural
     #position based on the iv. The other set, gets tacked onto the end,
     #but still following the natural iv-based ordering at the end.
     #returns the sorted list and a list of zygotic sets
+    #depends on self.msc.getIntervalVector
     @abstractmethod
     def getSortedUniqueCombinations(self, card):
         pass
@@ -59,7 +66,7 @@ class Combinations(ABC):
     #If the input is zygotic, add Z to the cardinality, i.e.
     #"cardinalityZ-lexicographical_index"
     @abstractmethod
-    def getSortedUniqueCombinations(self, card):
+    def getForteNumber(self, card):
         pass
     
     
