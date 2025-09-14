@@ -25,7 +25,6 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
     const blackKeys = [1, 3, 6, 8, 10];
     const synthRef = useRef(null);
     const muted = useRef(false);
-    const [loadingResults, setLoadingResults] = useState(false);
 
     // useEffect(
     //     () => {
@@ -75,7 +74,6 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
     };
 
     const analyze = () => {
-        setLoadingResults(true);
         let inputSet;
         if (inputMode === 'piano') {
             inputSet = Array.from(selectedNotes);
@@ -96,9 +94,10 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                     synthRef.current.triggerRelease(note, now + 1);
                 });
             }
-
-            if (window.getPrimeForm) {
-                const pf = window.getPrimeForm(inputSet);
+            console.log('window.getPrimeForm',window.getPrimeForm);
+            const pf = window.getPrimeForm && window.getPrimeForm(inputSet);
+            console.log('pf', pf);
+            if (pf) {
                 setResults((prev) => ({
                     ...prev, primeForm:
                     {
@@ -117,12 +116,13 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
 
-            if (window.getIntervalVector) {
+            const iv = window.getIntervalVector && window.getIntervalVector(inputSet);
+            if (iv) {
                 setResults((prev) => ({
                     ...prev, intervalVector:
                     {
                         label: 'Interval Vector',
-                        value: `<${window.getIntervalVector(inputSet).join(',\u200B')}>`
+                        value: `<${iv.join(',\u200B')}>`
                     }
                 }));
             }
@@ -136,11 +136,12 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
 
-            if (window.isTranspositionallySymmetrical) {
+            const ts = window.isTranspositionallySymmetrical && window.isTranspositionallySymmetrical(inputSet);
+            if (ts) {
                 setResults((prev) => ({
                     ...prev, isTranspositionallySymmetrical: {
                         label: 'Transpositionally Symmetrical',
-                        value: `${window.isTranspositionallySymmetrical(inputSet)}`
+                        value: `${ts}`
                     }
                 }));
             }
@@ -153,8 +154,8 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
 
-            if (window.getInversion) {
-                const inv = window.getInversion(inputSet);
+            const inv = window.getInversion && window.getInversion(inputSet);
+            if (inv) {
                 setResults((prev) => ({
                     ...prev, inversion: {
                         label: 'Inversion',
@@ -171,11 +172,12 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
 
-            if (window.isInversionallySymmetrical) {
+            const is = window.isInversionallySymmetrical && window.isInversionallySymmetrical(inputSet);
+            if (is) {
                 setResults((prev) => ({
                     ...prev, isInversionallySymmetrical: {
                         label: 'Inversionally Symmetrical',
-                        value: `${window.isInversionallySymmetrical(inputSet)}`
+                        value: `${is}`
                     }
                 }));
             }
@@ -188,8 +190,8 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
 
-            if (window.getComplement) {
-                const comp = window.getComplement(inputSet);
+            const comp = window.getComplement && window.getComplement(inputSet);
+            if (comp) {
                 setResults((prev) => ({
                     ...prev, complement: {
                         label: 'Complement',
@@ -206,11 +208,12 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 }));
             }
 
-            if (window.getForteNumber) {
+            const fn = window.getForteNumber && window.getForteNumber(inputSet);
+            if (fn) {
                 setResults((prev) => ({
                     ...prev, forteNumber: {
                         label: 'Forte Number (Rahn-Solomon Flavor)',
-                        value: `window.getForteNumber(inputSet)`
+                        value: `${fn}`
                     }
                 }));
             }
@@ -218,21 +221,12 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                 setResults((prev) => ({
                     ...prev, getForteNumber: {
                         label: 'Forte Number (Rahn-Solomon Flavor)',
-                        value: "ERROR: Backend logic for Forte numbers not implemented."
+                        value: "ERROR: Backend logic for complements not implemented."
                     }
                 }));
             }
         }
-        setLoadingResults(false);
     };
-
-    useEffect(() => {
-        if (!results) return;
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: 'smooth'
-        });
-    }, [results])
 
     const normalizeSet = useCallback((set) => {
         var resultsNorm = []
@@ -468,10 +462,6 @@ const PitchClassAnalyzer = ({ pyLoaded }) => {
                             </div>)
                             )
                             }
-
-                            {loadingResults && (
-                                <LoadingSpinner />
-                            )}
 
                         </div>
                     </div>

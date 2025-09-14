@@ -2,10 +2,8 @@ package war;
 
 import java.util.ArrayList;
 
-import org.teavm.jso.JSExport;
-
 //Generates primeform as stipulated by Larry Solomon (i.e. ignoring inversional equivalence)
-public interface Calculator {
+public interface PrimeForm{
 
     public ArrayList<Integer> tansToZero(ArrayList<Integer> set);
 
@@ -17,6 +15,5 @@ public interface Calculator {
 
     // takes set of unique ints in mod 12;
     // outputs normal order transposed to zero ("prime form")
-    @JSExport
     public ArrayList<Integer> getPrimeForm(ArrayList<Integer> set);
 }

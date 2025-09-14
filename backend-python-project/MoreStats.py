@@ -44,7 +44,7 @@ class MoreStats(ABC):
     #(solomon's prime form) of the set equals the normal 
     # form of the inversion.
 
-    #depends on getInversion and PrimeForm.getPrimeForm
+    #depends on getInversion and self.pfc.getPrimeForm
     @abstractmethod
     def isInversionallySymmetrical(self, set):
         pass
@@ -52,7 +52,7 @@ class MoreStats(ABC):
     #takes a set, returns the 12-tone complement in normal
     #form (solomon's prime form)
 
-    #depends on PrimeForm.getPrimeForm
+    #depends on self.pfc.getPrimeForm
     @abstractmethod
     def getComplement(self, set):
         pass
