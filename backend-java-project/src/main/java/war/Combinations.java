@@ -85,14 +85,15 @@ public interface Combinations {
      *   position based on the IV. The other set gets tacked onto the end,
      *   but still follows the natural IV-based ordering at the end.
      * 
-     * Returns both the sorted list and a list of zygotic sets.
+     * Returns both the sorted list and a list of zygotic sets wrapped in the
+     * provided wrapper class.
      * 
      * Depends on msc.getIntervalVector
      *
      * @param card the target cardinality (size) of the combinations.
      * @return an ArrayList<ArrayList<Integer>> containing the sorted unique combinations.
      */
-    ArrayList<ArrayList<Integer>> getSortedUniqueCombinations(int card);
+    LexicographicWrapper getSortedUniqueCombinations(int card);
 
     /**
      * Takes a set (ArrayList<Integer>) in ascending order.
